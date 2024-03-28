@@ -51,25 +51,7 @@ deploy_aio_resources() {
     ./03-aio-deploy-core.sh
     ./04-aio-deploy-bicep.sh
     ./05-aio-deploy-manifests.sh
-    ./06-observability.sh
     popd
-}
-
-deploy_dp_pipelines() {
-    pushd ./deployment
-    ./01-aio-deploy-dp-pipelines.sh
-    popd
-}
-
-print_dashboard_url() {
-    # Check if the grafana.json file exists
-    if [ ! -f ~/.azure/grafana.json ]; then
-        echo "File ~/.azure/grafana.json does not exist."
-        exit 1
-    fi
-
-    dashboard_url=$(cat ~/.azure/grafana.json | jq -r '.["dashboard-url"]')
-    echo "Click on the link to access the dashboard: $dashboard_url"
 }
 
 suffix=$(date +%s | cut -c6-10)
@@ -78,8 +60,6 @@ navigate_to_script_dir
 create_service_principal $suffix
 connect_to_arc $suffix
 deploy_aio_resources $suffix
-deploy_dp_pipelines
-print_dashboard_url
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
 
